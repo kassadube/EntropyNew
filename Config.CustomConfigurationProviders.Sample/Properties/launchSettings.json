@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Config.CustomConfigurationProviders.Sample": {
+      "commandName": "Project"
+    }
+  }
+}
