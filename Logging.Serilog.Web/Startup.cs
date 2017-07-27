@@ -41,12 +41,12 @@ namespace Logging.Serilog.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             loggerFactory.AddSerilog();
-
+            loggerFactory.AddFile("Logs/myapp-{Date}.txt", isJson: true);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -65,6 +65,8 @@ namespace Logging.Serilog.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            // Ensure any buffered events are sent at shutdown
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
         }
     }
 }
