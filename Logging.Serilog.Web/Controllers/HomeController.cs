@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Logging.Serilog.Web.Controllers
 {
@@ -31,7 +32,6 @@ namespace Logging.Serilog.Web.Controllers
             t.LogInformation("INJECT DYNAMIC ENTERED CONTACT");
            
             ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
