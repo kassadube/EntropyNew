@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Logging.NLog.Web.Controllers
 {
@@ -23,6 +24,8 @@ namespace Logging.NLog.Web.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
+            var t = (ILogger)HttpContext.RequestServices.GetService(typeof(ILogger<HomeController>));
+            t.LogInformation("INJECT DYNAMIC ENTERED CONTACT");
 
             return View();
         }

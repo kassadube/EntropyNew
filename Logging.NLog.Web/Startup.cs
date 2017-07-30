@@ -33,8 +33,12 @@ namespace Logging.NLog.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddMvc();
+            
+                services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                // Add framework services.
+                services.AddMvc();
+
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +50,9 @@ namespace Logging.NLog.Web
 
             //add NLog.Web
             app.AddNLogWeb();
+            //LogManager.Configuration.Variables["connectionString"] = Configuration.GetConnectionString("NLogDb");
+            LogManager.Configuration.Variables["configDir"] = "C:\\git\\noam\\AspNetCoreNlog\\Logs";
+            LogManager.ConfigurationReloaded += updateConfig;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -64,6 +71,12 @@ namespace Logging.NLog.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void updateConfig(object sender, LoggingConfigurationReloadedEventArgs e)
+        {
+            LogManager.Configuration.Variables["connectionString"] = Configuration.GetConnectionString("NLogDb");
+            LogManager.Configuration.Variables["configDir"] = "C:\\git\\noam\\AspNetCoreNlog\\Logs";
         }
     }
 }
